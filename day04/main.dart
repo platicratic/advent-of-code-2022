@@ -14,10 +14,7 @@ void partOne(final List<List<int>> sections) {
 void partTwo(final List<List<int>> sections) {
   int sol = 0;
   for (List<int> section in sections) {
-    if ((section[2] >= section[0] && section[2] <= section[1]) ||
-        (section[3] >= section[0] && section[3] <= section[1]) ||
-        (section[0] >= section[2] && section[1] <= section[3]) ||
-        (section[2] >= section[0] && section[3] <= section[1])) {
+    if (section[0] <= section[3] && section[2] <= section[1]) {
       sol++;
     }
   }

@@ -11,7 +11,7 @@ class Monkey {
 
 List<Monkey> read() {
   List<Monkey> monkeys = [];
-  /*List<Function> operations = [
+  List<Function> operations = [
     (final int old) => old * 17,
     (final int old) => old * old,
     (final int old) => old + 7,
@@ -20,12 +20,6 @@ List<Monkey> read() {
     (final int old) => old + 6,
     (final int old) => old * 13,
     (final int old) => old + 2,
-  ];*/
-  List<Function> operations = [
-        (final int old) => old * 19,
-        (final int old) => old + 6,
-        (final int old) => old * old,
-        (final int old) => old + 3,
   ];
   List<String> lines = File('input.txt').readAsLinesSync();
   for (int i = 0; i < lines.length; i += 7) {
@@ -40,8 +34,14 @@ List<Monkey> read() {
   return monkeys;
 }
 
+void solution(final List<Monkey> monkeys) {
+  List<int> inspects = monkeys.map((Monkey monkey) => monkey.count).toList();
+  inspects.sort();
+  print(inspects[inspects.length - 2] * inspects.last);
+}
+
 void one(final List<Monkey> monkeys) {
-  for (int i = 0; i < 1; i ++) {
+  for (int i = 0; i < 20; i ++) {
     for (Monkey monkey in monkeys) {
       for (int item in monkey.items) {
         item = monkey.operation(item) ~/ 3;
@@ -51,28 +51,32 @@ void one(final List<Monkey> monkeys) {
       monkey.items.clear();
     }
   }
-  List<int> inspects = monkeys.map((Monkey monkey) => monkey.count).toList();
-  print(inspects);
-  inspects.sort();
-  print(inspects[inspects.length - 2] * inspects.last);
+  solution(monkeys);
+}
+
+int gcd(final int a, final int b) {
+  if (b == 0) return a;
+  return gcd(b, a % b);
+}
+
+int lcd(final int a, final int b) {
+  return a * b ~/ gcd(a, b);
 }
 
 void two(final List<Monkey> monkeys) {
-  for (int i = 0; i < 1000; i ++) {
+  int cmmmc = monkeys.first.test;
+  monkeys.skip(1).forEach((Monkey monkey) { cmmmc = lcd(cmmmc, monkey.test); });
+  for (int i = 0; i < 10000; i ++) {
     for (Monkey monkey in monkeys) {
       for (int item in monkey.items) {
-        item = monkey.operation(item) % 666013; // probabil cel mai mic multiplu comun aici
+        item = monkey.operation(item) % cmmmc;
         monkeys[(item % monkey.test == 0 ? monkey.ifTrue : monkey.ifFalse)].items.add(item);
       }
       monkey.count += monkey.items.length;
       monkey.items.clear();
     }
   }
-  List<int> inspects = monkeys.map((Monkey monkey) => monkey.count).toList();
-  print(inspects);
-  //print(monkeys[0].items);
-  inspects.sort();
-  print(inspects[inspects.length - 2] * inspects.last);
+  solution(monkeys);
 }
 
 void main() {
